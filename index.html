@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>КиберПраво — Защита от интернет-мошенничества</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #0f3460;
+            --highlight: #e94560;
+            --highlight2: #00d4ff;
+            --text: #eaeaea;
+            --text-muted: #9aa5b4;
+            --card-bg: rgba(255,255,255,0.04);
+            --card-border: rgba(255,255,255,0.08);
+            --success: #00c896;
+            --warning: #ffb347;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--primary);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        /* ─── ШАПКА ─── */
+        header {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            background: rgba(26,26,46,0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--card-border);
+            padding: 0 2rem;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--highlight2);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 36px; height: 36px;
+            background: linear-gradient(135deg, var(--highlight2), var(--highlight));
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        nav { display: flex; gap: 0.5rem; align-items: center; }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        nav a:hover { color: var(--text); background: var(--card-bg); }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--highlight), #c0392b) !important;
+            color: white !important;
+            font-weight: 600;
+        }
+
+        .burger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .burger span {
+            display: block;
+            width: 24px; height: 2px;
+            background: var(--text);
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+
+        /* ─── ГЕРОЙ ─── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 6rem 2rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,212,255,0.12) 0%, transparent 70%),
+                radial-gradient(ellipse 60% 50% at 80% 80%, rgba(233,69,96,0.1) 0%, transparent 60%);
+        }
+
+        .grid-overlay {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        .hero-content { position: relative; max-width: 760px; }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0,212,255,0.1);
+            border: 1px solid rgba(0,212,255,0.25);
+            border-radius: 100px;
+            padding: 6px 16px;
+            font-size: 0.8rem;
+            color: var(--highlight2);
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.2rem, 6vw, 4rem);
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 1.25rem;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--highlight2), var(--highlight));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 2.5rem;
+            max-width: 580px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.25s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--highlight2), #0099cc);
+            color: #000;
+        }
+
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,212,255,0.35); }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--card-border);
+            color: var(--text);
+        }
+
+        .btn-outline:hover { background: var(--card-bg); border-color: rgba(255,255,255,0.2); }
+
+        .hero-stats {
+            display: flex;
+            gap: 2.5rem;
+            justify-content: center;
+            margin-top: 4rem;
+            flex-wrap: wrap;
+        }
+
+        .stat { text-align: center; }
+        .stat-num { font-size: 1.8rem; font-weight: 800; color: var(--highlight2); }
+        .stat-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+
+        /* ─── СЕКЦИИ ─── */
+        section { padding: 5rem 2rem; }
+
+        .container { max-width: 1100px; margin: 0 auto; }
+
+        .section-label {
+            display: inline-block;
+            font-size: 0.75rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--highlight2);
+            margin-bottom: 0.75rem;
+        }
+
+        .section-title {
+            font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .section-sub {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.7;
+            max-width: 560px;
+            margin-bottom: 3rem;
+        }
+
+        /* ─── КАРТОЧКИ УГРОЗ ─── */
+        .threats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .threat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.75rem;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .threat-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: var(--card-accent, var(--highlight));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s;
+        }
+
+        .threat-card:hover::before { transform: scaleX(1); }
+
+        .threat-card:hover {
+            border-color: rgba(255,255,255,0.16);
+            transform: translateY(-4px);
+            background: rgba(255,255,255,0.07);
+        }
+
+        .threat-icon {
+            width: 52px; height: 52px;
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.1rem;
+        }
+
+        .threat-card h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 0.6rem;
+        }
+
+        .threat-card p {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            line-height: 1.65;
+        }
+
+        .threat-tag {
+            display: inline-block;
+            margin-top: 1rem;
+            font-size: 0.72rem;
+            padding: 3px 10px;
+            border-radius: 100px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+        }
+
+        /* ─── СОВЕТЫ ─── */
+        #tips { background: var(--secondary); }
+
+        .tips-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 9px 20px;
+            border-radius: 100px;
+            border: 1px solid var(--card-border);
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active, .tab-btn:hover {
+            background: linear-gradient(135deg, var(--highlight2), #0099cc);
+            color: #000;
+            border-color: transparent;
+            font-weight: 600;
+        }
+
+        .tips-content { display: none; }
+        .tips-content.active { display: block; }
+
+        .tips-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .tip-item {
+            display: flex;
+            gap: 1.25rem;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 1.4rem;
+            transition: all 0.25s;
+            align-items: flex-start;
+        }
+
+        .tip-item:hover {
+            border-color: rgba(0,212,255,0.25);
+            background: rgba(0,212,255,0.04);
+        }
+
+        .tip-num {
+            min-width: 36px; height: 36px;
+            background: linear-gradient(135deg, var(--highlight2), #0099cc);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: #000;
+            flex-shrink: 0;
+        }
+
+        .tip-body h4 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+        }
+
+        .tip-body p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .tip-level {
+            margin-left: auto;
+            flex-shrink: 0;
+            font-size: 0.7rem;
+            padding: 3px 10px;
+            border-radius: 100px;
+            font-weight: 600;
+            align-self: flex-start;
+        }
+
+        .level-easy { background: rgba(0,200,150,0.15); color: var(--success); }
+        .level-med  { background: rgba(255,179,71,0.15); color: var(--warning); }
+        .level-hard { background: rgba(233,69,96,0.15); color: var(--highlight); }
+
+        /* ─── ЧЕКЛИСТ ─── */
+        #checklist { background: var(--primary); }
+
+        .checklist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1.1rem 1.25rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        .check-item.checked {
+            border-color: rgba(0,200,150,0.35);
+            background: rgba(0,200,150,0.06);
+        }
+
+        .check-box {
+            width: 22px; height: 22px;
+            border-radius: 6px;
+            border: 2px solid var(--card-border);
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            margin-top: 1px;
+            transition: all 0.2s;
+            font-size: 0.75rem;
+        }
+
+        .check-item.checked .check-box {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        .check-text {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            transition: color 0.2s;
+        }
+
+        .check-item.checked .check-text { color: var(--text); }
+
+        .progress-bar-wrap {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 8px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 100px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--highlight2), var(--success));
+            border-radius: 100px;
+            transition: width 0.4s ease;
+            width: 0%;
+        }
+
+        .progress-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .progress-pct {
+            font-weight: 700;
+            color: var(--highlight2);
+        }
+
+        /* ─── ТЕСТ ─── */
+        #quiz { background: var(--secondary); }
+
+        .quiz-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 700px;
+        }
+
+        .quiz-progress {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 2rem;
+        }
+
+        .quiz-dot {
+            height: 4px;
+            flex: 1;
+            border-radius: 100px;
+            background: rgba(255,255,255,0.1);
+            transition: background 0.3s;
+        }
+
+        .quiz-dot.done { background: var(--highlight2); }
+        .quiz-dot.current { background: rgba(0,212,255,0.5); }
+
+        .quiz-q {
+            font-size: 1.1rem;
+            font-weight: 600;
+            line-height: 1.5;
+            margin-bottom: 1.75rem;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .quiz-opt {
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            background: transparent;
+            color: var(--text);
+            font-size: 0.9rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quiz-opt:hover:not(:disabled) {
+            border-color: rgba(0,212,255,0.4);
+            background: rgba(0,212,255,0.06);
+        }
+
+        .quiz-opt.correct { border-color: var(--success); background: rgba(0,200,150,0.12); color: var(--success); }
+        .quiz-opt.wrong   { border-color: var(--highlight); background: rgba(233,69,96,0.1); color: var(--highlight); }
+
+        .quiz-feedback {
+            margin-top: 1.25rem;
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            display: none;
+        }
+
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.ok  { background: rgba(0,200,150,0.1); border: 1px solid rgba(0,200,150,0.25); color: #7fffd4; }
+        .quiz-feedback.err { background: rgba(233,69,96,0.1); border: 1px solid rgba(233,69,96,0.25); color: #ffb3b3; }
+
+        .quiz-nav {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.75rem;
+            align-items: center;
+        }
+
+        .quiz-counter {
+            margin-left: auto;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .quiz-result {
+            text-align: center;
+            display: none;
+        }
+
+        .quiz-result.show { display: block; }
+
+        .result-score {
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--highlight2), var(--success));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 1rem 0;
+        }
+
+        .result-msg {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        /* ─── АЛЕРТ БАННЕР ─── */
+        .alert-banner {
+            background: linear-gradient(135deg, rgba(233,69,96,0.15), rgba(233,69,96,0.05));
+            border: 1px solid rgba(233,69,96,0.3);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            display: flex;
+            gap: 1.25rem;
+            align-items: flex-start;
+            margin-bottom: 3rem;
+        }
+
+        .alert-icon { font-size: 1.5rem; flex-shrink: 0; }
+
+        .alert-body h4 { font-size: 1rem; font-weight: 700; margin-bottom: 0.3rem; color: #ff7f8e; }
+        .alert-body p  { font-size: 0.875rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* ─── ФУТЕР ─── */
+        footer {
+            background: var(--secondary);
+            border-top: 1px solid var(--card-border);
+            padding: 3rem 2rem 2rem;
+            text-align: center;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--highlight2);
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        footer p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+            max-width: 480px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: var(--highlight2); }
+
+        .footer-copy {
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.2);
+            border-top: 1px solid var(--card-border);
+            padding-top: 1.5rem;
+        }
+
+        /* ─── АНИМАЦИИ ─── */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50%       { transform: translateY(-10px); }
+        }
+
+        .float { animation: float 4s ease-in-out infinite; }
+
+        @keyframes pulse-ring {
+            0%   { transform: scale(0.9); opacity: 1; }
+            100% { transform: scale(1.6); opacity: 0; }
+        }
+
+        .pulse-dot {
+            position: relative;
+            display: inline-block;
+            width: 10px; height: 10px;
+            background: var(--highlight);
+            border-radius: 50%;
+        }
+
+        .pulse-dot::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: var(--highlight);
+            animation: pulse-ring 1.5s ease-out infinite;
+        }
+
+        /* ─── СКРОЛЛ-АНИМАЦИЯ ─── */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ─── АДАПТИВ ─── */
+        @media (max-width: 700px) {
+            nav { display: none; }
+            nav.open { display: flex; flex-direction: column; position: fixed; top: 64px; left: 0; right: 0; background: var(--secondary); padding: 1rem; border-bottom: 1px solid var(--card-border); }
+            .burger { display: flex; }
+            .hero-stats { gap: 1.5rem; }
+            .quiz-card { padding: 1.5rem; }
+            .alert-banner { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ─── ШАПКА ─── -->
+<header>
+    <a class="logo" href="#">
+        <div class="logo-icon">🔒</div>
+        КиберПраво
+    </a>
+    <nav id="nav">
+        <a href="#threats">Угрозы</a>
+        <a href="#tips">Советы</a>
+        <a href="#checklist">Чеклист</a>
+        <a href="#quiz">Тест</a>
+        <a href="#quiz" class="nav-cta btn">Проверить знания</a>
+    </nav>
+    <div class="burger" id="burger" onclick="toggleNav()">
+        <span></span><span></span><span></span>
+    </div>
+</header>
+
+<!-- ─── ГЕРОЙ ─── -->
+<section class="hero">
+    <div class="hero-bg"></div>
+    <div class="grid-overlay"></div>
+    <div class="hero-content">
+        <div class="hero-badge">
+            <span class="pulse-dot"></span>
+            Актуально в 2026 году
+        </div>
+        <h1>Защитите себя от<br><span>интернет-мошенников</span></h1>
+        <p>Фишинг, социальная инженерия, вишинг — узнайте, как работают злоумышленники, и научитесь защищать свои данные и деньги.</p>
+        <div class="hero-btns">
+            <a href="#threats" class="btn btn-primary">🔍 Узнать об угрозах</a>
+            <a href="#quiz" class="btn btn-outline">🧠 Пройти тест</a>
+        </div>
+        <div class="hero-stats">
+            <div class="stat">
+                <div class="stat-num">95%</div>
+                <div class="stat-label">атак начинаются с фишинга</div>
+            </div>
+            <div class="stat">
+                <div class="stat-num">3.4M</div>
+                <div class="stat-label">фишинговых писем в день</div>
+            </div>
+            <div class="stat">
+                <div class="stat-num">~$4.5M</div>
+                <div class="stat-label">средний ущерб от утечки</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ─── УГРОЗЫ ─── -->
+<section id="threats">
+    <div class="container">
+        <div class="fade-in">
+            <span class="section-label">⚠️ Виды угроз</span>
+            <h2 class="section-title">Как действуют мошенники</h2>
+            <p class="section-sub">Знание методов злоумышленников — первый шаг к защите. Изучите основные схемы обмана.</p>
+        </div>
+
+        <div class="alert-banner fade-in">
+            <div class="alert-icon">🚨</div>
+            <div class="alert-body">
+                <h4>Важно знать</h4>
+                <p>Мошенники постоянно совершенствуют свои методы. Они используют психологическое давление, срочность и страх, чтобы вы действовали не думая. Остановитесь, проверьте информацию — и вы уже в безопасности.</p>
+            </div>
+        </div>
+
+        <div class="threats-grid">
+            <div class="threat-card fade-in" style="--card-accent: #e94560;">
+                <div class="threat-icon" style="background: rgba(233,69,96,0.15);">🎣</div>
+                <h3>Фишинг</h3>
+                <p>Поддельные письма и сайты, имитирующие банки, госслужбы или известные компании. Цель — украсть логин, пароль или данные карты.</p>
+                <span class="threat-tag" style="background: rgba(233,69,96,0.15); color: #e94560;">Высокая опасность</span>
+            </div>
+            <div class="threat-card fade-in" style="--card-accent: #ff8c00;">
+                <div class="threat-icon" style="background: rgba(255,140,0,0.15);">🎭</div>
+                <h3>Социальная инженерия</h3>
+                <p>Манипуляция людьми через доверие, авторитет или срочность. Мошенник притворяется сотрудником банка, IT-специалистом или другом.</p>
+                <span class="threat-tag" style="background: rgba(255,140,0,0.15); color: #ff8c00;">Высокая опасность</span>
+            </div>
+            <div class="threat-card fade-in" style="--card-accent: #9b59b6;">
+                <div class="threat-icon" style="background: rgba(155,89,182,0.15);">📞</div>
+                <h3>Вишинг</h3>
+                <p>Телефонное мошенничество. Звонок от «службы безопасности банка» или «полиции» с требованием срочно перевести деньги или назвать код.</p>
+                <span class="threat-tag" style="background: rgba(155,89,182,0.15); color: #9b59b6;">Средняя опасность</span>
+            </div>
+            <div class="threat-card fade-in" style="--card-accent: #00d4ff;">
+                <div class="threat-icon" style="background: rgba(0,212,255,0.15);">💬</div>
+                <h3>Смишинг</h3>
+                <p>Фишинг через SMS. Сообщения о «выигрыше», «блокировке карты» или «посылке» со ссылкой на поддельный сайт.</p>
+                <span class="threat-tag" style="background: rgba(0,212,255,0.15); color: #00d4ff;">Средняя опасность</span>
+            </div>
+            <div class="threat-card fade-in" style="--card-accent: #00c896;">
+                <div class="threat-icon" style="background: rgba(0,200,150,0.15);">💸</div>
+                <h3>Мошенничество с инвестициями</h3>
+                <p>Обещания сверхдоходов, «безрисковых» вложений или криптовалютных схем. Классическая пирамида в современной обёртке.</p>
+                <span class="threat-tag" style="background: rgba(0,200,150,0.15); color: #00c896;">Финансовый риск</span>
+            </div>
+            <div class="threat-card fade-in" style="--card-accent: #e67e22;">
+                <div class="threat-icon" style="background: rgba(230,126,34,0.15);">🛒</div>
+                <h3>Фейковые магазины</h3>
+                <p>Поддельные интернет-магазины с невероятными ценами. После оплаты товар не приходит, а магазин исчезает.</p>
+                <span class="threat-tag" style="background: rgba(230,126,34,0.15); color: #e67e22;">Финансовый риск</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ─── СОВЕТЫ ─── -->
+<section id="tips">
+    <div class="container">
+        <div class="fade-in">
+            <span class="section-label">💡 Защита</span>
+            <h2 class="section-title">Практические советы</h2>
+            <p class="section-sub">Конкретные действия, которые помогут вам оставаться в безопасности онлайн.</p>
+        </div>
+
+        <div class="tips-tabs fade-in">
+            <button class="tab-btn active" onclick="switchTab('phishing')">🎣 Фишинг</button>
+            <button class="tab-btn" onclick="switchTab('social')">🎭 Соц. инженерия</button>
+            <button class="tab-btn" onclick="switchTab('passwords')">🔑 Пароли</button>
+            <button class="tab-btn" onclick="switchTab('money')">💳 Финансы</button>
+        </div>
+
+        <!-- Фишинг -->
+        <div class="tips-content active" id="tab-phishing">
+            <div class="tips-list">
+                <div class="tip-item fade-in">
+                    <div class="tip-num">01</div>
+                    <div class="tip-body">
+                        <h4>Проверяйте адрес отправителя и домен сайта</h4>
+                        <p>Мошенники используют домены вроде «belarusbank-secure.by» или «g00gle.com». Всегда смотрите на точный адрес, а не только на отображаемое имя. Настоящий банк не пишет с Gmail или Yandex.Mail.</p>
+                    </div>
+                    <span class="tip-level level-easy">Базовый</span>
+                </div>
+                <div class="tip-item fade-in">
+                    <div class="tip-num">02</div>
+                    <div class="tip-body">
+                        <h4>Не переходите по ссылкам из писем — заходите напрямую</h4>
+                        <p>Если получили письмо от «банка», не кликайте по ссылке. Откройте новую вкладку и введите адрес банка вручную или через закладки. Это займёт 5 секунд и сохранит ваши деньги.</p>
+                    </div>
+                    <span class="tip-level level-easy">Базовый</span>
+                </div>
+                <div class="tip-item fade-in">
+                    <div class="tip-num">03</div>
+                    <div class="tip-body">
+                        <h4>Проверяйте HTTPS, но не доверяйте ему слепо</h4>
+                        <p>Замок в браузере означает лишь шифрование соединения, но не честность сайта. Фишинговые сайты тоже используют HTTPS. Главное — правильный домен.</p>
+                    </div>
+                    <span class="tip-level level-med">Важно</span>
+                </div>
+                <div class="tip-item fade-in">
+                    <div class="tip-num">04</div>
+                    <div class="tip-body">
+                        <h4>Используйте антифишинговые расширения браузера</h4>
+                        <p>Установите расширения вроде Google Safe Browsing (встроено в Chrome), uBlock Origin или Malwarebytes Browser Guard. Они предупредят о подозрительных сайтах до того, как вы введёте данные.</p>
+                    </div>
+                    <span class="tip-level level-med">Важно</span>
+                </div>
+                <div class="tip-item fade-in">
+                    <div class="tip-num">05</div>
+                    <div class="tip-body">
+                        <h4>Включите двухфакторную аутентификацию (2FA)</h4>
+                        <p>Даже если мошенник получит ваш пароль, без второго фактора (кода из приложения или SMS) он не войдёт в аккаунт. Используйте приложение-аутентификатор вместо SMS, где возможно.</p>
+                    </div>
+                    <span class="tip-level level-easy">Базовый</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Социальная инженерия -->
+        <div class="tips-content" id="tab-social">
+            <div class="tips-list">
+                <div class="tip-item fade-in">
+                    <div class="tip-num">01</div>
+                    <div class="tip-body">
+                        <h4>Остановитесь при давлении «срочно!»</h4>
+                        <p>Мошенники создают искусственную срочность: «Ваш счёт заблокируют через 10 минут!» Это психологическая манипуляция. Легитимные организации не требуют немедленных действий под угрозой катастрофы.</p>
+                    </div>
+                    <span class="tip-level level-easy">Базовый</span>
+                </div>
+                <div class="tip-item fade-in">
+                    <div class="tip-num">02</div>
+                    <div class="tip-body">
+                        <h4>Перезвоните по официальному номеру</h4>
+                        <p>Если вам позвонили из «банка» — положите трубку и сами позвоните на номер с обратной стороны вашей карты или с официального сайта. Не используйте номер, который вам продиктовали.</p>
+                    </div>
+                    <span class="tip-level level-easy">Базовый</span>
+                </div>
+                <div class="tip-item fade-in">
+                    <div class="tip-num">03</div>
+                    <div class="tip-body">
+                        <h4>Никогда не называйте CVV и коды из SMS</h4>
+                        <p>Ни один настоящий банк, магазин или госорган никогда не попросит CVV-код карты, полный номер карты или одноразовый код из SMS. Это запрос только от мошенника — без исключений.</p>
+                    </div>
+                    <span class="tip-level level-easy">Базовый</span>
+                </div>
+                <div class="tip-item fade-in">
+                    <div class="tip-num">04</div>
+                    <div class="tip-body">
+                        <h4>Будьте осторожны с «выгодными» предложениями в соцсетях</h4>
+                        <p>Взломанный аккаунт друга может рассылать просьбы о деньгах. Если «друг» просит перевод — позвоните ему напрямую и убедитесь, что это действительно он.</p>
+                    </div>
+                    <span class="tip-level level-med">Важно</span>
+                </div>
+                <div class="tip-item fade-in">
+                    <div class="tip-num">05</div>
+                    <div class="tip-body">
+                        <h4>Ограничьте личную информацию в открытом доступе</h4>
+                        <p>Мошенники собирают данные из соцсетей для персонализированных атак. Закройте профили, не публикуйте дату рождения, адрес, номер телефона в открытом доступе.</p>
+                    </div>
+                    <span class="tip-level level-med">Важно</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Пароли -->
+        <div class="tips-content" id="tab-passwords">
+            <div class="tips-list">
+                <div class="tip-item fade-in">
+                    <div class="tip-num">01</div>
+                    <div class="tip-body">
+                        <h4>Используйте менеджер паролей</h4>
+                        <p>Приложения вроде Bitwarden, 1Password или KeePass генерируют и хранят уникальные сложные пароли для каждого сайта. Вам нужно помнить только один мастер-пароль.</p>
+                    </div>
+                    <span class="tip-level level-easy">Базовый</span>
+                </div>
+                <div class="tip-item fade-in">
+                    <div class="tip-num">02</div>
+                    <div class="tip-body">
+                        <h4>Не повторяйте пароли на разных сайтах</h4>
+                        <p>Если один сайт взломают и утекут пароли, мошенники попробуют их везде (credential stuffing). Уникальный пароль на каждом сайте — критически важно.</p>
+                    </div>
+                    <span class="tip-level level-easy">Базовый</span>
+                </div>
+                <div class="tip-item fade-in">
+                    <div class="tip-num">03</div>
+                    <div class="tip-body">
+                        <h4>Проверьте, не утекли ли ваши данные</h4>
+                        <p>Зайдите на haveibeenpwned.com и введите свой email. Если ваши данные есть в утечках — срочно смените пароли на затронутых сервисах.</p>
+                    </div>
+                    <span class="tip-level level-med">Важно</span>
+                </div>
+                <div class="tip-item fade-in">
+                    <div class="tip-num">04</div>
+                    <div class="tip-body">
+                        <h4>Создавайте парольные фразы, а не слова</h4>
+                        <p>«Кот-Прыгнул-На-Луну-2026!» гораздо безопаснее, чем «Qwerty123». Длинная фраза из случайных слов — лучший пароль, который легко запомнить.</p>
+                    </div>
+                    <span class="tip-level level-hard">Продвинутый</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Финансы -->
+        <div class="tips-content" id="tab-money">
+            <div class="tips-list">
+                <div class="tip-item fade-in">
+                    <div class="tip-num">01</div>
+                    <div class="tip-body">
+                        <h4>Заведите отдельную карту для онлайн-покупок</h4>
+                        <p>Держите на ней только ту сумму, которую планируете потратить. Даже если данные карты утекут — потери будут минимальны.</p>
+                    </div>
+                    <span class="tip-level level-easy">Базовый</span>
+                </div>
+                <div class="tip-item fade-in">
+                    <div class="tip-num">02</div>
+                    <div class="tip-body">
+                        <h4>Включите уведомления по всем транзакциям</h4>
+                        <p>SMS или push-уведомления о каждом списании позволят мгновенно заметить несанкционированный платёж и заблокировать карту до того, как утекут все деньги.</p>
+                    </div>
+                    <span class="tip-level level-easy">Базовый</span>
+                </div>
+                <div class="tip-item fade-in">
+                    <div class="tip-num">03</div>
+                    <div class="tip-body">
+                        <h4>Проверяйте продавца перед покупкой</h4>
+                        <p>Ищите отзывы на независимых площадках, проверяйте дату регистрации домена (whois.domaintools.com). Новый домен + огромные скидки = красный флаг.</p>
+                    </div>
+                    <span class="tip-level level-med">Важно</span>
+                </div>
+                <div class="tip-item fade-in">
+                    <div class="tip-num">04</div>
+                    <div class="tip-body">
+                        <h4>Платите через защищённые платёжные системы</h4>
+                        <p>Используйте Apple Pay, Google Pay, PayPal или систему 3D Secure. Они не передают реальные данные карты продавцу и обеспечивают дополнительную защиту.</p>
+                    </div>
+                    <span class="tip-level level-med">Важно</span>
+                </div>
+                <div class="tip-item fade-in">
+                    <div class="tip-num">05</div>
+                    <div class="tip-body">
+                        <h4>Никогда не переводите деньги «на безопасный счёт»</h4>
+                        <p>«Безопасный счёт» — главный признак мошенника. Настоящие банки никогда не просят перевести деньги на другой счёт для их «защиты». Это 100% мошенничество.</p>
+                    </div>
+                    <span class="tip-level level-hard">Критично</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ─── ЧЕКЛИСТ ─── -->
+<section id="checklist">
+    <div class="container">
+        <div class="fade-in">
+            <span class="section-label">✅ Самопроверка</span>
+            <h2 class="section-title">Чеклист безопасности</h2>
+            <p class="section-sub">Отметьте пункты, которые вы уже выполнили. Стремитесь к 100%!</p>
+        </div>
+
+        <div class="progress-bar-wrap fade-in">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-label">Выполнено: <span class="progress-pct" id="progressPct">0%</span></div>
+        </div>
+
+        <div class="checklist-grid" id="checklistGrid">
+            <div class="check-item" onclick="toggleCheck(this)">
+                <div class="check-box">✓</div>
+                <div class="check-text">Включена двухфакторная аутентификация на почте</div>
+            </div>
+            <div class="check-item" onclick="toggleCheck(this)">
+                <div class="check-box">✓</div>
+                <div class="check-text">Включена 2FA в банковском приложении</div>
+            </div>
+            <div class="check-item" onclick="toggleCheck(this)">
+                <div class="check-box">✓</div>
+                <div class="check-text">Использую менеджер паролей</div>
+            </div>
+            <div class="check-item" onclick="toggleCheck(this)">
+                <div class="check-box">✓</div>
+                <div class="check-text">Разные пароли на разных сайтах</div>
+            </div>
+            <div class="check-item" onclick="toggleCheck(this)">
+                <div class="check-box">✓</div>
+                <div class="check-text">Проверил email на haveibeenpwned.com</div>
+            </div>
+            <div class="check-item" onclick="toggleCheck(this)">
+                <div class="check-box">✓</div>
+                <div class="check-text">Включены уведомления о транзакциях</div>
+            </div>
+            <div class="check-item" onclick="toggleCheck(this)">
+                <div class="check-box">✓</div>
+                <div class="check-text">Есть отдельная карта для онлайн-покупок</div>
+            </div>
+            <div class="check-item" onclick="toggleCheck(this)">
+                <div class="check-box">✓</div>
+                <div class="check-text">Установлен антивирус с актуальными базами</div>
+            </div>
+            <div class="check-item" onclick="toggleCheck(this)">
+                <div class="check-box">✓</div>
+                <div class="check-text">Браузер и ОС регулярно обновляются</div>
+            </div>
+            <div class="check-item" onclick="toggleCheck(this)">
+                <div class="check-box">✓</div>
+                <div class="check-text">Профили в соцсетях закрыты от посторонних</div>
+            </div>
+            <div class="check-item" onclick="toggleCheck(this)">
+                <div class="check-box">✓</div>
+                <div class="check-text">Знаю, что банк никогда не просит CVV</div>
+            </div>
+            <div class="check-item" onclick="toggleCheck(this)">
+                <div class="check-box">✓</div>
+                <div class="check-text">Рассказал близким об основных схемах мошенников</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ─── ТЕСТ ─── -->
+<section id="quiz">
+    <div class="container">
+        <div class="fade-in">
+            <span class="section-label">🧠 Тест</span>
+            <h2 class="section-title">Проверьте свои знания</h2>
+            <p class="section-sub">7 вопросов, которые помогут понять, насколько вы готовы к встрече с мошенниками.</p>
+        </div>
+
+        <div class="quiz-card fade-in">
+            <div id="quizMain">
+                <div class="quiz-progress" id="quizProgress"></div>
+                <div class="quiz-q" id="quizQ"></div>
+                <div class="quiz-options" id="quizOpts"></div>
+                <div class="quiz-feedback" id="quizFeedback"></div>
+                <div class="quiz-nav">
+                    <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" style="display:none;">Следующий вопрос →</button>
+                    <span class="quiz-counter" id="quizCounter"></span>
+                </div>
+            </div>
+            <div class="quiz-result" id="quizResult">
+                <div style="font-size:3rem;">🎉</div>
+                <div class="result-score" id="resultScore"></div>
+                <div class="result-msg" id="resultMsg"></div>
+                <button class="btn btn-primary" onclick="restartQuiz()">🔄 Пройти ещё раз</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ─── ФУТЕР ─── -->
+<footer>
+    <div class="footer-logo">
+        <div class="logo-icon">🔒</div>
+        КиберПраво
+    </div>
+    <p>Образовательный ресурс о кибербезопасности. Защитите себя и своих близких от интернет-мошенников. #КиберПраво</p>
+    <div class="footer-links">
+        <a href="#threats">Угрозы</a>
+        <a href="#tips">Советы</a>
+        <a href="#checklist">Чеклист</a>
+        <a href="#quiz">Тест</a>
+    </div>
+    <div class="footer-copy">© 2026 КиберПраво — В образовательных целях #КиберПраво</div>
+</footer>
+
+<script>
+function toggleNav() {
+    document.getElementById('nav').classList.toggle('open');
+}
+
+function switchTab(id) {
+    document.querySelectorAll('.tips-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    event.target.classList.add('active');
+    document.querySelectorAll('#tab-' + id + ' .fade-in').forEach(el => {
+        el.classList.remove('visible');
+        setTimeout(() => el.classList.add('visible'), 50);
+    });
+}
+
+function toggleCheck(el) {
+    el.classList.toggle('checked');
+    updateProgress();
+}
+
+function updateProgress() {
+    const items = document.querySelectorAll('.check-item');
+    const checked = document.querySelectorAll('.check-item.checked').length;
+    const pct = Math.round((checked / items.length) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressPct').textContent = pct + '%';
+}
+
+const questions = [
+    {
+        q: 'Вы получили письмо от «БеларусБанка» с просьбой срочно подтвердить данные карты. Адрес отправителя: belarusbank-security@gmail.com. Что вы сделаете?',
+        opts: ['Перейду по ссылке и введу данные — это срочно', 'Удалю письмо и позвоню в банк по номеру на карте', 'Отвечу на письмо и уточню детали', 'Перешлю письмо коллегам'],
+        correct: 1,
+        feedback: '✅ Верно! Настоящий банк никогда не пишет с Gmail. Всегда звоните в банк по официальному номеру, а не по контактам из подозрительного письма.'
+    },
+    {
+        q: 'Вам звонит «сотрудник службы безопасности банка» и говорит, что с вашего счёта пытаются украсть деньги. Он просит назвать код из SMS для «защиты». Ваши действия?',
+        opts: ['Назову код — нужно срочно защитить деньги', 'Повешу трубку и сам позвоню в банк', 'Попрошу назвать мне мои данные для проверки', 'Дам код, но только последние 2 цифры'],
+        correct: 1,
+        feedback: '✅ Правильно! Код из SMS — это ключ от вашего счёта. Банк никогда не попросит его по телефону. Повесьте трубку и позвоните сами по номеру с карты.'
+    },
+    {
+        q: 'Что означает замок (HTTPS) в адресной строке браузера?',
+        opts: ['Сайт безопасен и не является мошенническим', 'Соединение зашифровано, но это не гарантирует честность сайта', 'Сайт проверен государством', 'Ваши данные защищены от любых угроз'],
+        correct: 1,
+        feedback: '✅ Верно! HTTPS означает только шифрование трафика. Фишинговые сайты тоже используют HTTPS. Всегда проверяйте правильность домена.'
+    },
+    {
+        q: 'Друг в ВКонтакте просит срочно перевести ему 150 рублей — попал в беду. Что вы сделаете?',
+        opts: ['Переведу сразу — друг в опасности', 'Позвоню другу на телефон и уточню', 'Напишу в ответ и уточню детали в чате', 'Переведу половину сначала'],
+        correct: 1,
+        feedback: '✅ Правильно! Аккаунт мог быть взломан. Всегда звоните другу напрямую, чтобы убедиться, что просьба настоящая. Голосовой звонок сложнее подделать.'
+    },
+    {
+        q: 'Какой из паролей является наиболее безопасным?',
+        opts: ['Qwerty12345!', 'Ivan1990Ivanov', 'Кот-Прыгнул-На-Луну-2026!', 'P@ssw0rd'],
+        correct: 2,
+        feedback: '✅ Верно! Длинная парольная фраза из случайных слов — самый надёжный вариант. Она длинная, непредсказуемая и при этом легко запоминается.'
+    },
+    {
+        q: 'Вы нашли интернет-магазин с iPhone 15 Pro за 300 рублей (рыночная цена — 2800 рублей). Сайт зарегистрирован 3 дня назад. Что это?',
+        opts: ['Невероятная акция — нужно срочно купить', 'Скорее всего фейковый магазин — не покупать', 'Надёжный магазин с хорошими скидками', 'Официальная распродажа Apple'],
+        correct: 1,
+        feedback: '✅ Правильно! Цена ниже рыночной в 6 раз + новый домен = классические признаки мошеннического магазина. Если предложение кажется слишком хорошим — это ловушка.'
+    },
+    {
+        q: 'Что такое двухфакторная аутентификация (2FA) и зачем она нужна?',
+        opts: ['Двойной пароль — нужно вводить пароль дважды', 'Второй уровень защиты: даже зная пароль, войти без второго фактора нельзя', 'Шифрование данных на сайте', 'Автоматическая смена пароля каждые 2 недели'],
+        correct: 1,
+        feedback: '✅ Верно! 2FA — это второй замок на двери. Даже если мошенник украдёт ваш пароль, без кода из приложения-аутентификатора он не войдёт в аккаунт.'
+    }
+];
+
+let current = 0, score = 0, answered = false;
+
+function renderQuiz() {
+    const q = questions[current];
+    const prog = document.getElementById('quizProgress');
+    prog.innerHTML = questions.map((_, i) =>
+        `<div class="quiz-dot ${i < current ? 'done' : i === current ? 'current' : ''}"></div>`
+    ).join('');
+    document.getElementById('quizQ').textContent = q.q;
+    document.getElementById('quizOpts').innerHTML = q.opts.map((o, i) =>
+        `<button class="quiz-opt" onclick="answer(${i})">${o}</button>`
+    ).join('');
+    document.getElementById('quizCounter').textContent = `${current + 1} / ${questions.length}`;
+    document.getElementById('quizFeedback').className = 'quiz-feedback';
+    document.getElementById('quizFeedback').textContent = '';
+    document.getElementById('nextBtn').style.display = 'none';
+    answered = false;
+}
+
+function answer(idx) {
+    if (answered) return;
+    answered = true;
+    const q = questions[current];
+    const opts = document.querySelectorAll('.quiz-opt');
+    opts.forEach(o => o.disabled = true);
+    opts[idx].classList.add(idx === q.correct ? 'correct' : 'wrong');
+    if (idx !== q.correct) opts[q.correct].classList.add('correct');
+    if (idx === q.correct) score++;
+    const fb = document.getElementById('quizFeedback');
+    fb.textContent = q.feedback;
+    fb.className = 'quiz-feedback show ' + (idx === q.correct ? 'ok' : 'err');
+    document.getElementById('nextBtn').style.display = 'inline-flex';
+    document.getElementById('nextBtn').textContent =
+        current < questions.length - 1 ? 'Следующий вопрос →' : 'Посмотреть результат →';
+}
+
+function nextQuestion() {
+    current++;
+    if (current >= questions.length) {
+        showResult();
+    } else {
+        renderQuiz();
+    }
+}
+
+function showResult() {
+    document.getElementById('quizMain').style.display = 'none';
+    const res = document.getElementById('quizResult');
+    res.classList.add('show');
+    document.getElementById('resultScore').textContent = `${score} / ${questions.length}`;
+    const msgs = [
+        [0, 2, '😟 Нужно поучиться! Прочитайте наши советы и пройдите тест снова.'],
+        [3, 4, '😐 Неплохо, но есть над чем работать. Изучите разделы, где ошиблись.'],
+        [5, 6, '😊 Хорошие знания! Вы неплохо защищены, но совершенству нет предела.'],
+        [7, 7, '🏆 Отлично! Вы настоящий эксперт по кибербезопасности!']
+    ];
+    const msg = msgs.find(([min, max]) => score >= min && score <= max);
+    document.getElementById('resultMsg').textContent = msg[2];
+}
+
+function restartQuiz() {
+    current = 0; score = 0; answered = false;
+    document.getElementById('quizMain').style.display = 'block';
+    document.getElementById('quizResult').classList.remove('show');
+    renderQuiz();
+}
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+            setTimeout(() => e.target.classList.add('visible'), i * 80);
+        }
+    });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+renderQuiz();
+updateProgress();
+</script>
+</body>
+</html>
